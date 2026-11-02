@@ -11,7 +11,7 @@
  ],
  "etapes": [
   {"t": "wait", "ms": 1600},
-  {"t": "eval", "js": "(async()=>{for(let v=600;v<=700;v+=10){window.__set('prix',v);await new Promise(r=>setTimeout(r,90))}})()", "pause": 1600},
+  {"t": "eval", "js": "(async()=>{for(let v=240;v<=280;v+=4){window.__set('prix',v/100);await new Promise(r=>setTimeout(r,90))}})()", "pause": 1600},
   {"t": "eval", "js": "(async()=>{for(let v=38;v<=46;v+=1){window.__set('cm',v);await new Promise(r=>setTimeout(r,110))}})()", "pause": 1700},
   {"t": "eval", "js": "window.__scn('pess')", "pause": 2000},
   {"t": "eval", "js": "window.__scn('opt')", "pause": 2000},

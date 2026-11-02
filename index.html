@@ -83,12 +83,12 @@ td.n{color:var(--neg)}
 <div class="wrap">
 <aside id="hyp"></aside>
 <main>
-<h1>Unité de jus naturels, Mbanga</h1>
+<h1>Unité de jus naturels pressés à froid</h1>
 <p class="lead">Plan d'affaires sur cinq ans pour une petite unité de transformation de fruits (ananas, gingembre, bissap). Chaque hypothèse se règle à gauche : le compte de résultat, la trésorerie et la rentabilité se recalculent instantanément.</p>
 <div class="kpis" id="kpis"></div>
 <div class="grid2">
- <div class="card"><h2>Chiffre d'affaires et résultat net<small>millions FCFA</small><span class="lg"><span><i style="background:#134e4a"></i>CA</span><span><i style="background:#b7791f"></i>Résultat net</span></span></h2><svg id="ch1" width="100%" height="230"></svg></div>
- <div class="card"><h2>Trésorerie de fin d'année<small>millions FCFA</small></h2><svg id="ch2" width="100%" height="230"></svg></div>
+ <div class="card"><h2>Chiffre d'affaires et résultat net<small>milliers d'euros</small><span class="lg"><span><i style="background:#134e4a"></i>CA</span><span><i style="background:#b7791f"></i>Résultat net</span></span></h2><svg id="ch1" width="100%" height="230"></svg></div>
+ <div class="card"><h2>Trésorerie de fin d'année<small>milliers d'euros</small></h2><svg id="ch2" width="100%" height="230"></svg></div>
 </div>
 <div class="grid2">
  <div class="card"><div class="tabs" id="tt"><button data-t="cr" class="on">Compte de résultat</button><button data-t="tr">Plan de trésorerie</button><button data-t="fl">Flux et rentabilité</button></div><div class="scroll"><table id="tab"></table></div></div>
@@ -100,20 +100,20 @@ td.n{color:var(--neg)}
 <script>
 const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
 const H=[
- ['Activité',[['vol','Volume de l\'an 1','bouteilles',60000,400000,5000,180000],['crv','Croissance des volumes','%',0,60,1,25],['prix','Prix de vente HT','FCFA',300,1200,10,600],['hp','Hausse annuelle des prix','%',0,10,.5,3]]],
- ['Coûts',[['cm','Coût matière et emballage','% CA',15,70,1,38],['cf','Charges fixes de l\'an 1','M FCFA',10,120,1,42],['inf','Inflation des charges fixes','%',0,12,.5,4]]],
- ['Investissement et financement',[['inv','Investissement initial','M FCFA',20,250,1,85],['dur','Durée d\'amortissement','ans',3,10,1,5],['emp','Emprunt bancaire','M FCFA',0,200,1,50],['tx','Taux de l\'emprunt','%',4,18,.25,9],['bfr','Besoin en fonds de roulement','% CA',0,30,1,12]]],
- ['Fiscalité et actualisation',[['is','Impôt sur les sociétés','%',0,40,.5,30],['act','Taux d\'actualisation','%',6,25,.5,14]]]];
-const SC={cent:{},pess:{vol:150000,crv:15,prix:560,cm:42,cf:46},opt:{vol:210000,crv:32,prix:640,cm:35,cf:40}};
+ ['Activité',[['vol','Volume de l\'an 1','bouteilles',60000,400000,5000,180000],['crv','Croissance des volumes','%',0,60,1,25],['prix','Prix de vente HT','€',1.2,4.8,.05,2.4],['hp','Hausse annuelle des prix','%',0,10,.5,3]]],
+ ['Coûts',[['cm','Coût matière et emballage','% CA',15,70,1,38],['cf','Charges fixes de l\'an 1','k€',40,480,2,168],['inf','Inflation des charges fixes','%',0,12,.5,4]]],
+ ['Investissement et financement',[['inv','Investissement initial','k€',80,1000,5,340],['dur','Durée d\'amortissement','ans',3,10,1,5],['emp','Emprunt bancaire','k€',0,800,5,200],['tx','Taux de l\'emprunt','%',1,10,.25,4.5],['bfr','Besoin en fonds de roulement','% CA',0,30,1,12]]],
+ ['Fiscalité et actualisation',[['is','Impôt sur les sociétés','%',0,40,.5,25],['act','Taux d\'actualisation','%',4,20,.5,9]]]];
+const SC={cent:{},pess:{vol:150000,crv:15,prix:2.25,cm:42,cf:184},opt:{vol:210000,crv:32,prix:2.55,cm:35,cf:160}};
 const BASE={};H.forEach(g=>g[1].forEach(f=>BASE[f[0]]=f[6]));
 let P={...BASE},tab='cr';
 const fr=(v,d=1)=>(v<0?'−':'')+Math.abs(v).toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d});
-const fmtH=(k,v)=>k==='vol'?Math.round(v).toLocaleString('fr-FR'):k==='prix'?v.toLocaleString('fr-FR'):fr(v,Number.isInteger(v)?0:k==='tx'?2:1);
+const fmtH=(k,v)=>k==='vol'?Math.round(v).toLocaleString('fr-FR'):k==='prix'?fr(v,2):fr(v,Number.isInteger(v)?0:k==='tx'?2:1);
 $('#hyp').innerHTML=H.map(([g,fs])=>`<h3>${g}</h3>`+fs.map(([k,n,u,mi,ma,st])=>`<div class="f"><label for="h-${k}">${n}<span id="v-${k}"></span></label><input type="range" id="h-${k}" data-k="${k}" min="${mi}" max="${ma}" step="${st}"></div>`).join('')).join('');
 function syncInputs(){Object.keys(P).forEach(k=>{$('#h-'+k).value=P[k];const u=H.flatMap(g=>g[1]).find(f=>f[0]===k)[2];$('#v-'+k).textContent=fmtH(k,P[k])+' '+(u==='bouteilles'?'u.':u)})}
 $('#hyp').addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;P[k]=+e.target.value;$$('#scn button').forEach(b=>b.classList.remove('on'));syncInputs();run()});
 // modèle
-function model(p){const Y=[1,2,3,4,5],r={};const M=1e6;
+function model(p){const Y=[1,2,3,4,5],r={};const M=1e3;
  r.vol=Y.map(y=>p.vol*Math.pow(1+p.crv/100,y-1));r.px=Y.map(y=>p.prix*Math.pow(1+p.hp/100,y-1));
  r.ca=Y.map((_,i)=>r.vol[i]*r.px[i]/M);r.mat=r.ca.map(c=>c*p.cm/100);r.mb=r.ca.map((c,i)=>c-r.mat[i]);
  r.cf=Y.map(y=>p.cf*Math.pow(1+p.inf/100,y-1));r.ebe=r.mb.map((m,i)=>m-r.cf[i]);
@@ -132,11 +132,11 @@ function model(p){const Y=[1,2,3,4,5],r={};const M=1e6;
  const mcu=p.prix*(1-p.cm/100);r.pm=Math.ceil(p.cf*M/mcu);return r}
 let R;
 function run(){R=model(P);kpis();chart1();chart2();table();tornado()}
-function kpis(){const k=[['VAN au taux de '+fr(P.act,1).replace(',0','')+' %',fr(R.van)+' M',R.van>=0?'<em class="ok">projet créateur de valeur</em>':'<em class="ko">projet destructeur de valeur</em>'],
+function kpis(){const k=[['VAN au taux de '+fr(P.act,1).replace(',0','')+' %',fr(R.van)+' k€',R.van>=0?'<em class="ok">projet créateur de valeur</em>':'<em class="ko">projet destructeur de valeur</em>'],
  ['Taux de rentabilité interne',R.tri==null?'n.d.':fr(R.tri*100)+' %',R.tri!=null&&R.tri*100>P.act?'<em class="ok">au-dessus du coût du capital</em>':'<em class="ko">sous le coût du capital</em>'],
  ['Délai de récupération',R.pb==null?'> 5 ans':fr(R.pb)+' ans','<em>sur flux de trésorerie disponibles</em>'],
  ['Point mort de l\'an 1',Math.round(R.pm).toLocaleString('fr-FR')+' u.',`<em class="${R.pm<=P.vol?'ok':'ko'}">${fr(R.pm/P.vol*100,0)} % du volume prévu</em>`],
- ['Résultat net cumulé',fr(R.rn.reduce((a,b)=>a+b,0))+' M',`<em>marge nette an 5 : ${fr(R.rn[4]/R.ca[4]*100)} %</em>`]];
+ ['Résultat net cumulé',fr(R.rn.reduce((a,b)=>a+b,0))+' k€',`<em>marge nette an 5 : ${fr(R.rn[4]/R.ca[4]*100)} %</em>`]];
  $('#kpis').innerHTML=k.map(([a,b,c])=>`<div class="kpi"><small>${a}</small><b>${b}</b>${c}</div>`).join('')}
 // graphiques
 const tip=$('#tip');function showTip(e,h){tip.innerHTML=h;tip.style.opacity=1;tip.style.left=Math.min(innerWidth-180,e.clientX+12)+'px';tip.style.top=e.clientY-40+'px'}
@@ -147,8 +147,8 @@ function nice(x){const p=Math.pow(10,Math.floor(Math.log10(x||1))),f=x/p;return 
 function axis(svg,W,h,s,l=44){return s.ticks.map(t=>`<line x1="${l}" x2="${W-6}" y1="${s.y(t)}" y2="${s.y(t)}" stroke="${t===0?'#9aa5a3':'#eef1f0'}"/><text x="${l-8}" y="${s.y(t)+4}" text-anchor="end">${fr(t,0)}</text>`).join('')}
 function chart1(){const svg=$('#ch1'),W=svg.clientWidth||600,h=230,s=scale([...R.ca,...R.rn],h),l=44,bw=(W-l-10)/5;
  let o=axis(svg,W,h,s,l);R.ca.forEach((c,i)=>{const x=l+i*bw+bw*.18,w=bw*.3;const y0=s.y(0);
-  o+=`<path d="${bar(x,s.y(c),w,y0)}" fill="#134e4a" data-tip="An ${i+1} · CA ${fr(c)} M FCFA"/>`;
-  const r=R.rn[i];o+=`<path d="${bar(x+w+2,s.y(r),w,y0)}" fill="#b7791f" data-tip="An ${i+1} · résultat net ${fr(r)} M FCFA"/>`;
+  o+=`<path d="${bar(x,s.y(c),w,y0)}" fill="#134e4a" data-tip="An ${i+1} · CA ${fr(c)} k€"/>`;
+  const r=R.rn[i];o+=`<path d="${bar(x+w+2,s.y(r),w,y0)}" fill="#b7791f" data-tip="An ${i+1} · résultat net ${fr(r)} k€"/>`;
   o+=`<text x="${l+i*bw+bw/2}" y="${h-6}" text-anchor="middle">An ${i+1}</text>`});
  o+=`<text x="${l+4*bw+bw*.18+bw*.15}" y="${s.y(R.ca[4])-6}" text-anchor="middle" style="fill:#16201f">${fr(R.ca[4],0)}</text>`;svg.innerHTML=o}
 function bar(x,y,w,y0){const r=Math.min(4,w/2,Math.abs(y0-y));if(y<=y0)return `M${x} ${y0}V${y+r}Q${x} ${y} ${x+r} ${y}H${x+w-r}Q${x+w} ${y} ${x+w} ${y+r}V${y0}Z`;return `M${x} ${y0}V${y-r}Q${x} ${y} ${x+r} ${y}H${x+w-r}Q${x+w} ${y} ${x+w} ${y-r}V${y0}Z`}
@@ -156,17 +156,17 @@ function chart2(){const svg=$('#ch2'),W=svg.clientWidth||400,h=230,v=[R.tdeb[0],
  let o=axis(svg,W,h,s,l);const pts=v.map((t,i)=>[l+12+i*st,s.y(t)]);
  o+=`<path d="M${pts[0][0]} ${s.y(0)}${pts.map(p=>`L${p[0]} ${p[1]}`).join('')}L${pts[5][0]} ${s.y(0)}Z" fill="#0f766e" opacity=".1"/>`;
  o+=`<path d="M${pts.map(p=>p.join(' ')).join('L')}" fill="none" stroke="#0f766e" stroke-width="2"/>`;
- pts.forEach((p,i)=>{o+=`<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="${v[i]<0?'#b42318':'#0f766e'}" stroke="#fff" stroke-width="2"/><circle cx="${p[0]}" cy="${p[1]}" r="14" fill="transparent" data-tip="${i?'Fin an '+i:'Ouverture'} · ${fr(v[i])} M FCFA"/><text x="${p[0]}" y="${h-6}" text-anchor="middle">${i?'An '+i:'Départ'}</text>`});
+ pts.forEach((p,i)=>{o+=`<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="${v[i]<0?'#b42318':'#0f766e'}" stroke="#fff" stroke-width="2"/><circle cx="${p[0]}" cy="${p[1]}" r="14" fill="transparent" data-tip="${i?'Fin an '+i:'Ouverture'} · ${fr(v[i])} k€"/><text x="${p[0]}" y="${h-6}" text-anchor="middle">${i?'An '+i:'Départ'}</text>`});
  o+=`<text x="${pts[5][0]}" y="${pts[5][1]-10}" text-anchor="end" style="fill:#16201f">${fr(v[5])}</text>`;svg.innerHTML=o}
-function table(){const Y='<thead><tr><th>M FCFA</th><th>An 1</th><th>An 2</th><th>An 3</th><th>An 4</th><th>An 5</th></tr></thead>';const row=(n,a,c='')=>`<tr class="${c}"><td>${n}</td>${a.map(v=>`<td class="${v<-.0001?'n':''}">${fr(v)}</td>`).join('')}</tr>`;
+function table(){const Y='<thead><tr><th>k€</th><th>An 1</th><th>An 2</th><th>An 3</th><th>An 4</th><th>An 5</th></tr></thead>';const row=(n,a,c='')=>`<tr class="${c}"><td>${n}</td>${a.map(v=>`<td class="${v<-.0001?'n':''}">${fr(v)}</td>`).join('')}</tr>`;
  let b='';if(tab==='cr')b=row('Volume (milliers de bouteilles)',R.vol.map(v=>v/1000),'sub')+row('Chiffre d\'affaires',R.ca,'t')+row('Coût matière et emballage',R.mat.map(x=>-x),'sub')+row('Marge brute',R.mb)+row('Charges fixes',R.cf.map(x=>-x),'sub')+row('Excédent brut d\'exploitation',R.ebe,'t')+row('Dotations aux amortissements',R.am.map(x=>-x),'sub')+row('Résultat d\'exploitation',R.rex)+row('Charges d\'intérêts',R.int.map(x=>-x),'sub')+row('Impôt sur les sociétés',R.imp.map(x=>-x),'sub')+row('Résultat net',R.rn,'t');
  else if(tab==='tr')b=row('Trésorerie d\'ouverture',R.tdeb)+row('Capacité d\'autofinancement',R.caf,'sub')+row('Variation du BFR',R.dbfr.map(x=>-x),'sub')+row('Remboursement d\'emprunt',R.rc.map(x=>-x),'sub')+row('Trésorerie de clôture',R.tfin,'t');
- else b=`<thead><tr><th>M FCFA</th><th>An 0</th><th>An 1</th><th>An 2</th><th>An 3</th><th>An 4</th><th>An 5</th></tr></thead>`+row('Flux de trésorerie disponible',R.fcf,'t')+row('Facteur d\'actualisation',R.fcf.map((_,i)=>1/Math.pow(1+P.act/100,i)),'sub')+row('Flux actualisé',R.fcf.map((f,i)=>f/Math.pow(1+P.act/100,i)))+row('Flux actualisés cumulés',R.fcf.reduce((a,f,i)=>(a.push((a[i-1]||0)+f/Math.pow(1+P.act/100,i)),a),[]),'t');
+ else b=`<thead><tr><th>k€</th><th>An 0</th><th>An 1</th><th>An 2</th><th>An 3</th><th>An 4</th><th>An 5</th></tr></thead>`+row('Flux de trésorerie disponible',R.fcf,'t')+row('Facteur d\'actualisation',R.fcf.map((_,i)=>1/Math.pow(1+P.act/100,i)),'sub')+row('Flux actualisé',R.fcf.map((f,i)=>f/Math.pow(1+P.act/100,i)))+row('Flux actualisés cumulés',R.fcf.reduce((a,f,i)=>(a.push((a[i-1]||0)+f/Math.pow(1+P.act/100,i)),a),[]),'t');
  $('#tab').innerHTML=(tab==='fl'?'':Y)+'<tbody>'+b+'</tbody>'}
 $('#tt').onclick=e=>{const b=e.target.closest('button');if(!b)return;tab=b.dataset.t;$$('#tt button').forEach(x=>x.classList.toggle('on',x===b));table()};
 function tornado(){const V=[['prix','Prix de vente'],['vol','Volume'],['cm','Coût matière'],['cf','Charges fixes'],['inv','Investissement'],['act','Taux d\'actualisation']].map(([k,n])=>{const lo=model({...P,[k]:P[k]*.8}).van,hi=model({...P,[k]:P[k]*1.2}).van;return {n,lo,hi,d:Math.abs(hi-lo)}}).sort((a,b)=>b.d-a.d);
  const all=V.flatMap(v=>[v.lo,v.hi,R.van]),mn=Math.min(...all),mx=Math.max(...all),X=v=>8+(v-mn)/(mx-mn||1)*84;
- $('#tor').innerHTML=V.map(v=>{const a=Math.min(v.lo,v.hi),b=Math.max(v.lo,v.hi);return `<div class="row"><span>${v.n}</span><div class="bar"><div style="left:${X(a)}%;width:${X(R.van)-X(a)}%;background:#e6b8b3" data-tip="${v.n} ${v.lo<v.hi?'−':'+'}20 % · VAN ${fr(a)} M"></div><div style="left:${X(R.van)}%;width:${X(b)-X(R.van)}%;background:#9fcfc5" data-tip="${v.n} ${v.lo<v.hi?'+':'−'}20 % · VAN ${fr(b)} M"></div><span style="right:${100-X(a)+1}%">${fr(a,0)}</span><span style="left:${X(b)+1}%">${fr(b,0)}</span><i class="mid" style="left:${X(R.van)}%"></i></div></div>`}).join('')}
+ $('#tor').innerHTML=V.map(v=>{const a=Math.min(v.lo,v.hi),b=Math.max(v.lo,v.hi);return `<div class="row"><span>${v.n}</span><div class="bar"><div style="left:${X(a)}%;width:${X(R.van)-X(a)}%;background:#e6b8b3" data-tip="${v.n} ${v.lo<v.hi?'−':'+'}20 % · VAN ${fr(a)} k€"></div><div style="left:${X(R.van)}%;width:${X(b)-X(R.van)}%;background:#9fcfc5" data-tip="${v.n} ${v.lo<v.hi?'+':'−'}20 % · VAN ${fr(b)} k€"></div><span style="right:${100-X(a)+1}%">${fr(a,0)}</span><span style="left:${X(b)+1}%">${fr(b,0)}</span><i class="mid" style="left:${X(R.van)}%"></i></div></div>`}).join('')}
 $('#scn').onclick=e=>{const b=e.target.closest('button');if(!b)return;setScn(b.dataset.s)};
 function setScn(s){P={...BASE,...SC[s]};$$('#scn button').forEach(x=>x.classList.toggle('on',x.dataset.s===s));syncInputs();run()}
 window.__scn=setScn;window.__set=(k,v)=>{P[k]=v;syncInputs();run()};window.__tab=t=>$(`#tt [data-t="${t}"]`).click();
