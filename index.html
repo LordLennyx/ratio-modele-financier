@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ratio — modèle financier sur 5 ans · Jus Mbanga</title>
+<meta name="description" content="Ratio, modèle financier interactif sur cinq ans : hypothèses réglables, compte de résultat, plan de trésorerie, VAN, TRI, point mort, scénarios et analyse de sensibilité, avec le classeur Excel à formules.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&family=Newsreader:opsz,wght@6..72,500;6..72,600&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23134e4a'/%3E%3Cpath d='M8 23V15M14 23V10M20 23V17M26 23V7' stroke='%23fff' stroke-width='3'/%3E%3C/svg%3E">
+<style>
+:root{--ink:#16201f;--mute:#5f6b69;--line:#e1e5e3;--soft:#f3f5f4;--bg:#fbfbfa;--acc:#134e4a;--acc2:#0f766e;--pos:#0f766e;--neg:#b42318;--gold:#b7791f}
+*{box-sizing:border-box;margin:0}
+body{background:var(--bg);color:var(--ink);font:400 14px/1.5 'IBM Plex Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+button,input,select{font:inherit;color:inherit}button{cursor:pointer}
+.num{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
+header{display:flex;align-items:center;gap:16px;padding:14px 24px;border-bottom:1px solid var(--line);background:#fff;position:sticky;top:0;z-index:5}
+.logo{display:flex;align-items:center;gap:9px;font-weight:600;font-size:16px}
+.logo i{width:28px;height:28px;border-radius:6px;background:var(--acc);display:grid;place-items:center}
+.crumb{color:var(--mute);border-left:1px solid var(--line);padding-left:16px}
+.crumb b{color:var(--ink);font-weight:600}
+.sp{flex:1}
+.seg{display:flex;background:var(--soft);border-radius:9px;padding:3px}
+.seg button{border:0;background:none;padding:6px 12px;border-radius:7px;font-weight:500;color:var(--mute)}
+.seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.1)}
+.btn{border:1px solid var(--line);background:#fff;border-radius:9px;padding:8px 13px;font-weight:500;display:inline-flex;align-items:center;gap:7px;text-decoration:none;color:inherit}
+.btn.p{background:var(--acc);border-color:var(--acc);color:#fff}
+.wrap{display:grid;grid-template-columns:330px 1fr;min-height:calc(100vh - 61px)}
+aside{border-right:1px solid var(--line);background:#fff;padding:18px 20px 30px;height:calc(100vh - 61px);overflow:auto;position:sticky;top:61px}
+aside h3{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);font-weight:600;margin:18px 0 8px}
+aside h3:first-child{margin-top:0}
+.f{margin-bottom:12px}
+.f label{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
+.f label span{font-family:'IBM Plex Mono';font-weight:500;background:#e9f3f1;color:var(--acc);padding:0 6px;border-radius:5px}
+input[type=range]{width:100%;accent-color:var(--acc);height:18px}
+main{padding:22px 28px 40px;min-width:0}
+h1{font:600 30px/1.15 'Newsreader',serif;letter-spacing:-.01em}
+.lead{color:var(--mute);margin:4px 0 18px;max-width:70ch}
+.kpis{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-bottom:18px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:12px;padding:13px 15px}
+.kpi small{color:var(--mute);font-size:12px;display:block}
+.kpi b{font:500 22px 'IBM Plex Mono';display:block;margin-top:3px;letter-spacing:-.02em}
+.kpi em{font-style:normal;font-size:12px}
+.kpi .ok{color:var(--pos)}.kpi .ko{color:var(--neg)}
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px;margin-bottom:14px}
+.card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 18px;min-width:0}
+.card h2{font-size:14.5px;font-weight:600;display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.card h2 small{color:var(--mute);font-weight:400;font-size:12.5px}
+.lg{display:flex;gap:14px;font-size:12px;color:var(--mute);margin-left:auto;font-weight:400}
+.lg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px}
+svg text{font-family:'IBM Plex Mono';font-size:11px;fill:#5f6b69}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{padding:7px 10px;text-align:right;border-bottom:1px solid #eef1f0;white-space:nowrap}
+th:first-child,td:first-child{text-align:left}
+thead th{font-size:11.5px;color:var(--mute);font-weight:600;text-transform:uppercase;letter-spacing:.05em;background:var(--soft)}
+td{font-family:'IBM Plex Mono';font-size:12.5px}
+td:first-child{font-family:'IBM Plex Sans';font-size:13px}
+tr.t td{font-weight:600;background:#f7faf9;border-top:1px solid var(--line)}
+tr.sub td:first-child{padding-left:22px;color:var(--mute)}
+td.n{color:var(--neg)}
+.tabs{display:flex;gap:4px;margin-bottom:10px}
+.tabs button{border:0;background:none;padding:6px 10px;border-radius:7px;color:var(--mute);font-weight:500}
+.tabs button.on{background:var(--soft);color:var(--ink)}
+.scroll{overflow-x:auto}
+.tor .row{display:grid;grid-template-columns:140px 1fr;align-items:center;gap:10px;height:30px}
+.tor .bar{position:relative;height:18px}
+.tor .bar div{position:absolute;top:0;height:18px;border-radius:3px}
+.tor .bar span{position:absolute;top:1px;font:11px 'IBM Plex Mono';color:var(--mute)}
+.mid{position:absolute;top:-4px;bottom:-4px;width:1px;background:var(--ink)}
+.note{font-size:12.5px;color:var(--mute);margin-top:10px}
+.xl{display:flex;gap:14px;align-items:center;background:#ecf5f2;border:1px solid #cfe5df;border-radius:12px;padding:14px 16px}
+.xl svg{flex:none}
+.xl p{flex:1;font-size:13px}
+.tip{position:fixed;pointer-events:none;background:var(--ink);color:#fff;font:12px 'IBM Plex Mono';padding:6px 9px;border-radius:7px;opacity:0;transition:opacity .12s;z-index:30;white-space:nowrap}
+@media (max-width:1100px){.kpis{grid-template-columns:repeat(3,1fr)}.grid2{grid-template-columns:1fr}}
+@media (max-width:820px){.wrap{grid-template-columns:1fr}aside{position:static;height:auto;border-right:0;border-top:1px solid var(--line);order:2}header{flex-wrap:wrap;padding:12px 16px}.crumb{display:none}main{padding:18px 16px}.kpis{grid-template-columns:1fr 1fr}.hm{display:none}h1{font-size:25px}.card h2{flex-wrap:wrap}.card h2 small{display:none}.lg{margin-left:0;width:100%}}
+</style>
+</head>
+<body>
+<header><span class="logo"><i><svg width="16" height="16" viewBox="0 0 16 16"><path d="M3 13V8M6.5 13V5M10 13V9M13.5 13V3" stroke="#fff" stroke-width="2"/></svg></i>Ratio</span><span class="crumb">Dossiers / <b>Jus Mbanga · unité de production</b></span><span class="sp"></span>
+<div class="seg" id="scn"><button data-s="pess">Prudent</button><button data-s="cent" class="on">Central</button><button data-s="opt">Ambitieux</button></div>
+<a class="btn p hm" href="modele-financier-jus-mbanga.xlsx" download><svg width="15" height="15" viewBox="0 0 16 16"><path d="M8 2v8m-3-3 3 3 3-3M3 13h10" stroke="currentColor" stroke-width="1.6" fill="none"/></svg>Classeur Excel</a></header>
+<div class="wrap">
+<aside id="hyp"></aside>
+<main>
+<h1>Unité de jus naturels, Mbanga</h1>
+<p class="lead">Plan d'affaires sur cinq ans pour une petite unité de transformation de fruits (ananas, gingembre, bissap). Chaque hypothèse se règle à gauche : le compte de résultat, la trésorerie et la rentabilité se recalculent instantanément.</p>
+<div class="kpis" id="kpis"></div>
+<div class="grid2">
+ <div class="card"><h2>Chiffre d'affaires et résultat net<small>millions FCFA</small><span class="lg"><span><i style="background:#134e4a"></i>CA</span><span><i style="background:#b7791f"></i>Résultat net</span></span></h2><svg id="ch1" width="100%" height="230"></svg></div>
+ <div class="card"><h2>Trésorerie de fin d'année<small>millions FCFA</small></h2><svg id="ch2" width="100%" height="230"></svg></div>
+</div>
+<div class="grid2">
+ <div class="card"><div class="tabs" id="tt"><button data-t="cr" class="on">Compte de résultat</button><button data-t="tr">Plan de trésorerie</button><button data-t="fl">Flux et rentabilité</button></div><div class="scroll"><table id="tab"></table></div></div>
+ <div class="card"><h2>Sensibilité de la VAN<small>variation de ±20 %</small></h2><div class="tor" id="tor"></div><p class="note">Lecture : si le prix de vente baisse de 20 %, la VAN passe à la valeur de gauche. Les barres sont triées par impact.</p>
+ <div class="xl" style="margin-top:16px"><svg width="34" height="34" viewBox="0 0 34 34"><rect width="34" height="34" rx="7" fill="#1d6f42"/><path d="M10 10l14 14M24 10 10 24" stroke="#fff" stroke-width="3"/></svg><p><b>Le classeur Excel suit le même modèle.</b><br>Feuille « Hypothèses » à modifier, feuille « Modèle » entièrement en formules (VAN, TRI, point mort).</p><a class="btn" href="modele-financier-jus-mbanga.xlsx" download>Télécharger</a></div></div>
+</div>
+</main></div>
+<div class="tip" id="tip"></div>
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const H=[
+ ['Activité',[['vol','Volume de l\'an 1','bouteilles',60000,400000,5000,180000],['crv','Croissance des volumes','%',0,60,1,25],['prix','Prix de vente HT','FCFA',300,1200,10,600],['hp','Hausse annuelle des prix','%',0,10,.5,3]]],
+ ['Coûts',[['cm','Coût matière et emballage','% CA',15,70,1,38],['cf','Charges fixes de l\'an 1','M FCFA',10,120,1,42],['inf','Inflation des charges fixes','%',0,12,.5,4]]],
+ ['Investissement et financement',[['inv','Investissement initial','M FCFA',20,250,1,85],['dur','Durée d\'amortissement','ans',3,10,1,5],['emp','Emprunt bancaire','M FCFA',0,200,1,50],['tx','Taux de l\'emprunt','%',4,18,.25,9],['bfr','Besoin en fonds de roulement','% CA',0,30,1,12]]],
+ ['Fiscalité et actualisation',[['is','Impôt sur les sociétés','%',0,40,.5,30],['act','Taux d\'actualisation','%',6,25,.5,14]]]];
+const SC={cent:{},pess:{vol:150000,crv:15,prix:560,cm:42,cf:46},opt:{vol:210000,crv:32,prix:640,cm:35,cf:40}};
+const BASE={};H.forEach(g=>g[1].forEach(f=>BASE[f[0]]=f[6]));
+let P={...BASE},tab='cr';
+const fr=(v,d=1)=>(v<0?'−':'')+Math.abs(v).toLocaleString('fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d});
+const fmtH=(k,v)=>k==='vol'?Math.round(v).toLocaleString('fr-FR'):k==='prix'?v.toLocaleString('fr-FR'):fr(v,Number.isInteger(v)?0:k==='tx'?2:1);
+$('#hyp').innerHTML=H.map(([g,fs])=>`<h3>${g}</h3>`+fs.map(([k,n,u,mi,ma,st])=>`<div class="f"><label for="h-${k}">${n}<span id="v-${k}"></span></label><input type="range" id="h-${k}" data-k="${k}" min="${mi}" max="${ma}" step="${st}"></div>`).join('')).join('');
+function syncInputs(){Object.keys(P).forEach(k=>{$('#h-'+k).value=P[k];const u=H.flatMap(g=>g[1]).find(f=>f[0]===k)[2];$('#v-'+k).textContent=fmtH(k,P[k])+' '+(u==='bouteilles'?'u.':u)})}
+$('#hyp').addEventListener('input',e=>{const k=e.target.dataset.k;if(!k)return;P[k]=+e.target.value;$$('#scn button').forEach(b=>b.classList.remove('on'));syncInputs();run()});
+// modèle
+function model(p){const Y=[1,2,3,4,5],r={};const M=1e6;
+ r.vol=Y.map(y=>p.vol*Math.pow(1+p.crv/100,y-1));r.px=Y.map(y=>p.prix*Math.pow(1+p.hp/100,y-1));
+ r.ca=Y.map((_,i)=>r.vol[i]*r.px[i]/M);r.mat=r.ca.map(c=>c*p.cm/100);r.mb=r.ca.map((c,i)=>c-r.mat[i]);
+ r.cf=Y.map(y=>p.cf*Math.pow(1+p.inf/100,y-1));r.ebe=r.mb.map((m,i)=>m-r.cf[i]);
+ r.am=Y.map(y=>y<=p.dur?p.inv/p.dur:0);r.rex=r.ebe.map((e,i)=>e-r.am[i]);
+ let crd=p.emp;const ann=p.emp?p.emp*(p.tx/100)/(1-Math.pow(1+p.tx/100,-5)):0;r.int=[];r.rc=[];
+ Y.forEach(()=>{const it=crd*p.tx/100,c=p.emp?ann-it:0;r.int.push(it);r.rc.push(c);crd-=c});
+ r.rai=r.rex.map((x,i)=>x-r.int[i]);r.imp=r.rai.map(x=>Math.max(0,x*p.is/100));r.rn=r.rai.map((x,i)=>x-r.imp[i]);
+ r.caf=r.rn.map((x,i)=>x+r.am[i]);const bfr=r.ca.map(c=>c*p.bfr/100);r.dbfr=bfr.map((b,i)=>b-(i?bfr[i-1]:0));
+ const apport=Math.max(0,p.inv-p.emp)+bfr[0]*0;r.apport=apport;
+ let t=apport+p.emp-p.inv;r.tdeb=[];r.tfin=[];Y.forEach((_,i)=>{r.tdeb.push(t);t+=r.caf[i]-r.dbfr[i]-r.rc[i];r.tfin.push(t)});
+ r.fcf=[-p.inv,...Y.map((_,i)=>r.rex[i]*(1-p.is/100)+r.am[i]-r.dbfr[i])];
+ r.fcf[5]+=bfr[4];// récupération du BFR en fin de période
+ const a=p.act/100;r.van=r.fcf.reduce((s,f,i)=>s+f/Math.pow(1+a,i),0);
+ const npv=x=>r.fcf.reduce((s,f,i)=>s+f/Math.pow(1+x,i),0);let lo=-.9,hi=3;if(npv(lo)*npv(hi)>0)r.tri=null;else{for(let k=0;k<80;k++){const m=(lo+hi)/2;npv(lo)*npv(m)<=0?hi=m:lo=m}r.tri=(lo+hi)/2}
+ let cum=r.fcf[0];r.pb=null;for(let i=1;i<=5;i++){const prev=cum;cum+=r.fcf[i];if(cum>=0&&r.pb==null)r.pb=i-1+(-prev)/r.fcf[i]}
+ const mcu=p.prix*(1-p.cm/100);r.pm=Math.ceil(p.cf*M/mcu);return r}
+let R;
+function run(){R=model(P);kpis();chart1();chart2();table();tornado()}
+function kpis(){const k=[['VAN au taux de '+fr(P.act,1).replace(',0','')+' %',fr(R.van)+' M',R.van>=0?'<em class="ok">projet créateur de valeur</em>':'<em class="ko">projet destructeur de valeur</em>'],
+ ['Taux de rentabilité interne',R.tri==null?'n.d.':fr(R.tri*100)+' %',R.tri!=null&&R.tri*100>P.act?'<em class="ok">au-dessus du coût du capital</em>':'<em class="ko">sous le coût du capital</em>'],
+ ['Délai de récupération',R.pb==null?'> 5 ans':fr(R.pb)+' ans','<em>sur flux de trésorerie disponibles</em>'],
+ ['Point mort de l\'an 1',Math.round(R.pm).toLocaleString('fr-FR')+' u.',`<em class="${R.pm<=P.vol?'ok':'ko'}">${fr(R.pm/P.vol*100,0)} % du volume prévu</em>`],
+ ['Résultat net cumulé',fr(R.rn.reduce((a,b)=>a+b,0))+' M',`<em>marge nette an 5 : ${fr(R.rn[4]/R.ca[4]*100)} %</em>`]];
+ $('#kpis').innerHTML=k.map(([a,b,c])=>`<div class="kpi"><small>${a}</small><b>${b}</b>${c}</div>`).join('')}
+// graphiques
+const tip=$('#tip');function showTip(e,h){tip.innerHTML=h;tip.style.opacity=1;tip.style.left=Math.min(innerWidth-180,e.clientX+12)+'px';tip.style.top=e.clientY-40+'px'}
+document.addEventListener('pointerover',e=>{if(!e.target.closest('[data-tip]'))tip.style.opacity=0});
+document.addEventListener('pointermove',e=>{const t=e.target.closest('[data-tip]');if(t)showTip(e,t.dataset.tip)});
+function scale(vals,h,pad=22){const mx=Math.max(0,...vals),mn=Math.min(0,...vals);const st=nice((mx-mn)/4);const top=Math.ceil(mx/st)*st,bot=Math.floor(mn/st)*st;return {y:v=>pad+(top-v)/(top-bot||1)*(h-pad-26),ticks:[...Array(Math.round((top-bot)/st)+1)].map((_,i)=>bot+i*st)}}
+function nice(x){const p=Math.pow(10,Math.floor(Math.log10(x||1))),f=x/p;return (f<=1?1:f<=2?2:f<=2.5?2.5:f<=5?5:10)*p}
+function axis(svg,W,h,s,l=44){return s.ticks.map(t=>`<line x1="${l}" x2="${W-6}" y1="${s.y(t)}" y2="${s.y(t)}" stroke="${t===0?'#9aa5a3':'#eef1f0'}"/><text x="${l-8}" y="${s.y(t)+4}" text-anchor="end">${fr(t,0)}</text>`).join('')}
+function chart1(){const svg=$('#ch1'),W=svg.clientWidth||600,h=230,s=scale([...R.ca,...R.rn],h),l=44,bw=(W-l-10)/5;
+ let o=axis(svg,W,h,s,l);R.ca.forEach((c,i)=>{const x=l+i*bw+bw*.18,w=bw*.3;const y0=s.y(0);
+  o+=`<path d="${bar(x,s.y(c),w,y0)}" fill="#134e4a" data-tip="An ${i+1} · CA ${fr(c)} M FCFA"/>`;
+  const r=R.rn[i];o+=`<path d="${bar(x+w+2,s.y(r),w,y0)}" fill="#b7791f" data-tip="An ${i+1} · résultat net ${fr(r)} M FCFA"/>`;
+  o+=`<text x="${l+i*bw+bw/2}" y="${h-6}" text-anchor="middle">An ${i+1}</text>`});
+ o+=`<text x="${l+4*bw+bw*.18+bw*.15}" y="${s.y(R.ca[4])-6}" text-anchor="middle" style="fill:#16201f">${fr(R.ca[4],0)}</text>`;svg.innerHTML=o}
+function bar(x,y,w,y0){const r=Math.min(4,w/2,Math.abs(y0-y));if(y<=y0)return `M${x} ${y0}V${y+r}Q${x} ${y} ${x+r} ${y}H${x+w-r}Q${x+w} ${y} ${x+w} ${y+r}V${y0}Z`;return `M${x} ${y0}V${y-r}Q${x} ${y} ${x+r} ${y}H${x+w-r}Q${x+w} ${y} ${x+w} ${y-r}V${y0}Z`}
+function chart2(){const svg=$('#ch2'),W=svg.clientWidth||400,h=230,v=[R.tdeb[0],...R.tfin],s=scale(v,h),l=44,st=(W-l-24)/5;
+ let o=axis(svg,W,h,s,l);const pts=v.map((t,i)=>[l+12+i*st,s.y(t)]);
+ o+=`<path d="M${pts[0][0]} ${s.y(0)}${pts.map(p=>`L${p[0]} ${p[1]}`).join('')}L${pts[5][0]} ${s.y(0)}Z" fill="#0f766e" opacity=".1"/>`;
+ o+=`<path d="M${pts.map(p=>p.join(' ')).join('L')}" fill="none" stroke="#0f766e" stroke-width="2"/>`;
+ pts.forEach((p,i)=>{o+=`<circle cx="${p[0]}" cy="${p[1]}" r="4.5" fill="${v[i]<0?'#b42318':'#0f766e'}" stroke="#fff" stroke-width="2"/><circle cx="${p[0]}" cy="${p[1]}" r="14" fill="transparent" data-tip="${i?'Fin an '+i:'Ouverture'} · ${fr(v[i])} M FCFA"/><text x="${p[0]}" y="${h-6}" text-anchor="middle">${i?'An '+i:'Départ'}</text>`});
+ o+=`<text x="${pts[5][0]}" y="${pts[5][1]-10}" text-anchor="end" style="fill:#16201f">${fr(v[5])}</text>`;svg.innerHTML=o}
+function table(){const Y='<thead><tr><th>M FCFA</th><th>An 1</th><th>An 2</th><th>An 3</th><th>An 4</th><th>An 5</th></tr></thead>';const row=(n,a,c='')=>`<tr class="${c}"><td>${n}</td>${a.map(v=>`<td class="${v<-.0001?'n':''}">${fr(v)}</td>`).join('')}</tr>`;
+ let b='';if(tab==='cr')b=row('Volume (milliers de bouteilles)',R.vol.map(v=>v/1000),'sub')+row('Chiffre d\'affaires',R.ca,'t')+row('Coût matière et emballage',R.mat.map(x=>-x),'sub')+row('Marge brute',R.mb)+row('Charges fixes',R.cf.map(x=>-x),'sub')+row('Excédent brut d\'exploitation',R.ebe,'t')+row('Dotations aux amortissements',R.am.map(x=>-x),'sub')+row('Résultat d\'exploitation',R.rex)+row('Charges d\'intérêts',R.int.map(x=>-x),'sub')+row('Impôt sur les sociétés',R.imp.map(x=>-x),'sub')+row('Résultat net',R.rn,'t');
+ else if(tab==='tr')b=row('Trésorerie d\'ouverture',R.tdeb)+row('Capacité d\'autofinancement',R.caf,'sub')+row('Variation du BFR',R.dbfr.map(x=>-x),'sub')+row('Remboursement d\'emprunt',R.rc.map(x=>-x),'sub')+row('Trésorerie de clôture',R.tfin,'t');
+ else b=`<thead><tr><th>M FCFA</th><th>An 0</th><th>An 1</th><th>An 2</th><th>An 3</th><th>An 4</th><th>An 5</th></tr></thead>`+row('Flux de trésorerie disponible',R.fcf,'t')+row('Facteur d\'actualisation',R.fcf.map((_,i)=>1/Math.pow(1+P.act/100,i)),'sub')+row('Flux actualisé',R.fcf.map((f,i)=>f/Math.pow(1+P.act/100,i)))+row('Flux actualisés cumulés',R.fcf.reduce((a,f,i)=>(a.push((a[i-1]||0)+f/Math.pow(1+P.act/100,i)),a),[]),'t');
+ $('#tab').innerHTML=(tab==='fl'?'':Y)+'<tbody>'+b+'</tbody>'}
+$('#tt').onclick=e=>{const b=e.target.closest('button');if(!b)return;tab=b.dataset.t;$$('#tt button').forEach(x=>x.classList.toggle('on',x===b));table()};
+function tornado(){const V=[['prix','Prix de vente'],['vol','Volume'],['cm','Coût matière'],['cf','Charges fixes'],['inv','Investissement'],['act','Taux d\'actualisation']].map(([k,n])=>{const lo=model({...P,[k]:P[k]*.8}).van,hi=model({...P,[k]:P[k]*1.2}).van;return {n,lo,hi,d:Math.abs(hi-lo)}}).sort((a,b)=>b.d-a.d);
+ const all=V.flatMap(v=>[v.lo,v.hi,R.van]),mn=Math.min(...all),mx=Math.max(...all),X=v=>8+(v-mn)/(mx-mn||1)*84;
+ $('#tor').innerHTML=V.map(v=>{const a=Math.min(v.lo,v.hi),b=Math.max(v.lo,v.hi);return `<div class="row"><span>${v.n}</span><div class="bar"><div style="left:${X(a)}%;width:${X(R.van)-X(a)}%;background:#e6b8b3" data-tip="${v.n} ${v.lo<v.hi?'−':'+'}20 % · VAN ${fr(a)} M"></div><div style="left:${X(R.van)}%;width:${X(b)-X(R.van)}%;background:#9fcfc5" data-tip="${v.n} ${v.lo<v.hi?'+':'−'}20 % · VAN ${fr(b)} M"></div><span style="right:${100-X(a)+1}%">${fr(a,0)}</span><span style="left:${X(b)+1}%">${fr(b,0)}</span><i class="mid" style="left:${X(R.van)}%"></i></div></div>`}).join('')}
+$('#scn').onclick=e=>{const b=e.target.closest('button');if(!b)return;setScn(b.dataset.s)};
+function setScn(s){P={...BASE,...SC[s]};$$('#scn button').forEach(x=>x.classList.toggle('on',x.dataset.s===s));syncInputs();run()}
+window.__scn=setScn;window.__set=(k,v)=>{P[k]=v;syncInputs();run()};window.__tab=t=>$(`#tt [data-t="${t}"]`).click();
+addEventListener('resize',()=>{chart1();chart2()});
+syncInputs();run();
+</script>
+</body>
+</html>

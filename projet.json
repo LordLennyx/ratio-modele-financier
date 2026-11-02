@@ -1,0 +1,17 @@
+{
+ "repo": "ratio-modele-financier",
+ "nom": "Ratio",
+ "type": "Modèle financier et plan d'affaires",
+ "categorie": "Data et automatisation",
+ "resume": "Modèle financier sur cinq ans pour le plan d'affaires d'une unité de jus naturels : seize hypothèses réglables, compte de résultat, plan de trésorerie avec emprunt et BFR, flux disponibles actualisés, VAN, TRI, délai de récupération, point mort, trois scénarios et analyse de sensibilité. Livré avec un classeur Excel généré en Python dont toutes les cellules de calcul sont des formules.",
+ "fonctions": [
+  "Hypothèses réglables : volumes, prix, coûts, charges fixes, investissement, emprunt, BFR, impôt, actualisation",
+  "Compte de résultat, plan de trésorerie et tableau des flux actualisés sur cinq ans",
+  "Indicateurs : VAN, TRI par dichotomie, délai de récupération, point mort, marge nette",
+  "Scénarios prudent, central et ambitieux",
+  "Diagramme de sensibilité de la VAN à ±20 % trié par impact",
+  "Classeur Excel à formules (IPMT, PPMT, NPV, IRR) généré avec openpyxl"
+ ],
+ "stack": "HTML, CSS, JavaScript natif, SVG, Python (openpyxl), Excel",
+ "extra": {"Typographies": "IBM Plex Sans, IBM Plex Mono, Newsreader", "Évolutions possibles": "simulation de Monte-Carlo, bilan prévisionnel complet, import des données comptables, export PDF du dossier bancaire"}
+}
